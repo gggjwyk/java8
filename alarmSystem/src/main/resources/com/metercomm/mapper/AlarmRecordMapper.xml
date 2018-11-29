@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.metercomm.mapper.AlarmRecordMapper">
+    <select id="getMsg" resultType="java.lang.String">
+      select alarm_description from alarm_record limit 1
+    </select>
+
+    <!-- 时钟报警 -->
+    <select id="findDuplicateMsg" resultType="java.lang.Integer">
+      select count(*) from alarm_record
+      where
+        device_number = #{deviceNumber} and
+        device_name = #{deviceName} and
+        event_time = #{time}
+    </select>
+
+    <select id="szFaultRecover" parameterType="map" statementType="CALLABLE" resultType="java.lang.String">
+        <![CDATA[
+           CALL sz_fault_recover(
+           #{msgId, mode=IN, jdbcType=INTEGER},
+           #{subsystem, mode=IN, jdbcType=VARCHAR},
+           #{retMessage, mode=OUT, jdbcType=VARCHAR}
+           )
+        ]]>
+    </select>
+
+    <select id="zydhFaultRecover" parameterType="map" statementType="CALLABLE" resultType="java.lang.String">
+        <![CDATA[
+           CALL zydh_fault_recover(
+           #{msgId, mode=IN, jdbcType=INTEGER},
+           #{subsystem, mode=IN, jdbcType=VARCHAR},
+           #{zydhErrorNo, mode=IN, jdbcType=VARCHAR},
+           #{retMessage, mode=OUT, jdbcType=VARCHAR}
+           )
+        ]]>
+    </select>
+
+    <select id="paFaultRecover" parameterType="map" statementType="CALLABLE" resultType="java.lang.String">
+        <![CDATA[
+           CALL pa_fault_recover(
+           #{msgId, mode=IN, jdbcType=INTEGER},
+           #{subsystem, mode=IN, jdbcType=VARCHAR},
+           #{deviceNumber, mode=IN, jdbcType=VARCHAR},
+           #{retMessage, mode=OUT, jdbcType=VARCHAR}
+           )
+        ]]>
+    </select>
+
+    <select id="dyFaultRecover" parameterType="map" statementType="CALLABLE" resultType="java.lang.String">
+        <![CDATA[
+           CALL dy_fault_recover(
+           #{msgId, mode=IN, jdbcType=INTEGER},
+           #{subsystem, mode=IN, jdbcType=VARCHAR},
+           #{deviceNumber, mode=IN, jdbcType=VARCHAR},
+           #{retMessage, mode=OUT, jdbcType=VARCHAR}
+           )
+        ]]>
+    </select>
+
+    <select id="gwdhFaultRecover" parameterType="map" statementType="CALLABLE" resultType="java.lang.String">
+        <![CDATA[
+           CALL gwdh_fault_recover(
+           #{msgId, mode=IN, jdbcType=INTEGER},
+           #{subsystem, mode=IN, jdbcType=VARCHAR},
+           #{deviceName, mode=IN, jdbcType=VARCHAR},
+           #{alarmDesc, mode=IN, jdbcType=VARCHAR},
+           #{retMessage, mode=OUT, jdbcType=VARCHAR}
+           )
+        ]]>
+    </select>
+
+    <select id="csFaultRecover" parameterType="map" statementType="CALLABLE" resultType="java.lang.String">
+        <![CDATA[
+           CALL cs_fault_recover(
+           #{msgId, mode=IN, jdbcType=INTEGER},
+           #{subsystem, mode=IN, jdbcType=VARCHAR},
+           #{deviceNumber, mode=IN, jdbcType=VARCHAR},
+           #{retMessage, mode=OUT, jdbcType=VARCHAR}
+           )
+        ]]>
+    </select>
+
+</mapper>
